@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
+        
         moveSpeed = -moveSpeed;
         FlipSprite();
     }
@@ -38,4 +39,6 @@ public class Enemy : MonoBehaviour
         transform.localScale = new Vector2(-(Mathf.Sign(myRigidbody.velocity.x)), 1f);
         
     }
+
+    
 }

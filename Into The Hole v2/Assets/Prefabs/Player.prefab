@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4967211116762943209}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.341, y: -0.162, z: -0.00020668091}
+  m_LocalPosition: {x: 0.35, y: -0.162, z: -0.00020668091}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -111,7 +111,7 @@ SpriteRenderer:
   m_SortingLayerID: -1817681499
   m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1892340698, guid: 9c09ed4d84387d04ab6221dc03858a36, type: 3}
+  m_Sprite: {fileID: -1522774747, guid: 9c09ed4d84387d04ab6221dc03858a36, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -156,8 +156,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.006893754, y: 0.049980164}
-  m_Size: {x: 0.5427301, y: 0.7750397}
+  m_Offset: {x: -0.011683583, y: 0.021241188}
+  m_Size: {x: 0.53315043, y: 0.8325176}
   m_Direction: 0
 --- !u!95 &6345401629391406828
 Animator:
@@ -224,6 +224,8 @@ MonoBehaviour:
   moveSpeed: 9
   jumpSpeed: 20
   climbSpeed: 10
+  deathKick: {x: 20, y: 20}
+  stepBoost: {x: 0, y: 15}
   arrow: {fileID: 1487531896675657680, guid: d2bb0ba544901b6408ae6f89416d0931, type: 3}
   extraJumpCount: 1
   arrowSpawn: {fileID: 6883579925743300472}
@@ -240,16 +242,16 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.017234445, y: -0.39986584}
+  m_Offset: {x: -0.02, y: -0.39986584}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.75, y: 0.875}
+    oldSize: {x: 0.6875, y: 0.875}
     newSize: {x: 0.6875, y: 0.875}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.28765845, y: 0.075368345}
+  m_Size: {x: 0.22, y: 0.07}
   m_EdgeRadius: 0

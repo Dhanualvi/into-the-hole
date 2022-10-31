@@ -5,21 +5,34 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 10f;
     [SerializeField] float climbSpeed = 10f;
-    [SerializeField] GameObject arrow;
-    //[SerializeField] float defaultGravity = 10;
     [SerializeField] int extraJumpCount = 1;
-    [SerializeField] Transform arrowSpawn;
     
+    [Header("Bounce Boost")]  
+    [SerializeField] Vector2 deathKick = new Vector2(0f,10f);
+    [SerializeField] Vector2 stepBoost = new Vector2(0f,10f);
+    
+    //[SerializeField] float defaultGravity = 10;
+    [Header("Life")]
+    [SerializeField] int lifeCount = 1;
+
+    [Header("Arrow")]
+    [SerializeField] Transform arrowSpawn;
+    [SerializeField] GameObject arrow;
+
     int jumpCount;
     float defaultGravity;
+    bool isAlive = true;
+    bool isMoving;
 
     BoxCollider2D myFeetCollider;
     CapsuleCollider2D myBodyCollider;
     Rigidbody2D myRigidbody;
     Animator myAnimator;
+    Enemy enemy;
 
     Vector2 rawInput;
     // Start is called before the first frame update
@@ -30,37 +43,44 @@ public class Player : MonoBehaviour
         myFeetCollider = GetComponent<BoxCollider2D>();
         myAnimator = GetComponent<Animator>();
         myBodyCollider = GetComponent<CapsuleCollider2D>();
+        enemy = FindObjectOfType<Enemy>();
         defaultGravity = myRigidbody.gravityScale;
-
+        lifeCount = 3;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!isAlive) { return; }
         Run();
         FlipSprite();
         resetJumpCount();
         Climbing();
-        
+        Die();
+        steppingEnemy();
     }
 
     void OnMove(InputValue value)
     {
+        if (!isAlive) { return; }
         rawInput = value.Get<Vector2>();
     }
 
     void Run()
     {
+        
         Vector2 playerVelocity = new Vector2(rawInput.x * moveSpeed, myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;
 
         bool playerHasHorizontalSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
+        isMoving = playerHasHorizontalSpeed;
         myAnimator.SetBool("isRunning", playerHasHorizontalSpeed);
         
     }
 
     void Climbing()
     {
+       
         if (!myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Ladder"))) 
         {
             myAnimator.SetBool("isClimbing", false);
@@ -90,7 +110,7 @@ public class Player : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        
+        if (!isAlive) { return; }
         if (value.isPressed && jumpCount > 0)
         {
             myRigidbody.velocity = new Vector2(0f, jumpSpeed);
@@ -105,7 +125,8 @@ public class Player : MonoBehaviour
 
     void OnFire(InputValue value)
     {
-
+        if (!isAlive) { return; }
+        if (isMoving) { return; }
         if (value.isPressed)
         {
             myAnimator.SetTrigger("triggerShooting");
@@ -124,6 +145,41 @@ public class Player : MonoBehaviour
         {
             Debug.Log(jumpCount);
             jumpCount = extraJumpCount;
+        }
+    }
+
+    
+
+    void Die()
+    {
+        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        {
+            if (lifeCount > 0)
+            {
+                Debug.Log(lifeCount);
+                lifeCount--;
+                myRigidbody.velocity = deathKick;
+                myAnimator.SetTrigger("triggerDie");
+            }
+            else
+            {
+                myRigidbody.velocity = deathKick;
+                myAnimator.SetTrigger("triggerDie");
+                isAlive = false;
+            }
+            
+        }
+    }
+
+    void steppingEnemy()
+    {
+        if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        {
+            
+            myRigidbody.velocity = stepBoost;
+            Destroy(enemy.gameObject);
+            //myAnimator.SetTrigger("triggerDie");
+            //isAlive = false;
         }
     }
 }

@@ -21,5 +21,25 @@ public class Arrow : MonoBehaviour
     void Update()
     {
         myRigidbody.velocity = new Vector2(xSpeed, 0f);
+        FlipArrow();
+    }
+
+    void FlipArrow()
+    {
+        transform.localScale = new Vector2(0.1f * (Mathf.Sign(player.transform.localScale.x)), 0.1f);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Enemy")
+        {
+            Destroy(collision.gameObject);
+        }
+        Destroy(gameObject);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject);
     }
 }
