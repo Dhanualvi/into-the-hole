@@ -8,11 +8,13 @@ public class Player : MonoBehaviour
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 10f;
     [SerializeField] float climbSpeed = 10f;
+    [SerializeField] GameObject arrow;
     //[SerializeField] float defaultGravity = 10;
-    float defaultGravity;
     [SerializeField] int extraJumpCount = 1;
+    [SerializeField] Transform arrowSpawn;
     
     int jumpCount;
+    float defaultGravity;
 
     BoxCollider2D myFeetCollider;
     CapsuleCollider2D myBodyCollider;
@@ -39,6 +41,7 @@ public class Player : MonoBehaviour
         FlipSprite();
         resetJumpCount();
         Climbing();
+        
     }
 
     void OnMove(InputValue value)
@@ -100,6 +103,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    void OnFire(InputValue value)
+    {
+
+        if (value.isPressed)
+        {
+            myAnimator.SetTrigger("triggerShooting");
+            Instantiate(arrow, arrowSpawn.position, transform.rotation);
+            //myAnimator.SetBool("isShooting", true);
+            //myAnimator.SetBool("isShooting", false);
+        }
+        
+        //myAnimator.ResetTrigger("triggerShooting");
+        
+    }
+
     void resetJumpCount()
     {
         if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && jumpCount != extraJumpCount)
@@ -107,10 +125,5 @@ public class Player : MonoBehaviour
             Debug.Log(jumpCount);
             jumpCount = extraJumpCount;
         }
-    }
-
-    void UpdateGravity()
-    {
-
     }
 }

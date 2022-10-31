@@ -56,11 +56,11 @@ TagManager:
   - name: Hazard
     uniqueID: 943298809
     locked: 0
-  - name: Enemy
-    uniqueID: 211905903
-    locked: 0
   - name: Bouncy
     uniqueID: 1692056803
+    locked: 0
+  - name: Enemy
+    uniqueID: 211905903
     locked: 0
   - name: Player
     uniqueID: 2477285797
