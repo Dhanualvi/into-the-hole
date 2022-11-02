@@ -9,7 +9,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Portal
   - Water
   - UI
   - Ground
@@ -62,6 +62,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 211905903
+    locked: 0
+  - name: Portal
+    uniqueID: 1846268057
     locked: 0
   - name: Player
     uniqueID: 2477285797

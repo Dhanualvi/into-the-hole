@@ -10,14 +10,16 @@ public class Player : MonoBehaviour
     [SerializeField] float jumpSpeed = 10f;
     [SerializeField] float climbSpeed = 10f;
     [SerializeField] int extraJumpCount = 1;
+    [SerializeField] int arrowCount = 5;
+    [SerializeField] float invincibleTime = 1.5f;
     
     [Header("Bounce Boost")]  
     [SerializeField] Vector2 deathKick = new Vector2(0f,10f);
     [SerializeField] Vector2 stepBoost = new Vector2(0f,10f);
     
-    //[SerializeField] float defaultGravity = 10;
+    /*[SerializeField] float defaultGravity = 10;
     [Header("Life")]
-    [SerializeField] int lifeCount = 1;
+    [SerializeField] int lifeCount = 1;*/
 
     [Header("Arrow")]
     [SerializeField] Transform arrowSpawn;
@@ -27,6 +29,8 @@ public class Player : MonoBehaviour
     float defaultGravity;
     bool isAlive = true;
     bool isMoving;
+    bool isInvincible = false;
+    
 
     BoxCollider2D myFeetCollider;
     CapsuleCollider2D myBodyCollider;
@@ -35,7 +39,7 @@ public class Player : MonoBehaviour
     Enemy enemy;
 
     Vector2 rawInput;
-    // Start is called before the first frame update
+
     void Start()
     {
         jumpCount = 1;
@@ -45,19 +49,18 @@ public class Player : MonoBehaviour
         myBodyCollider = GetComponent<CapsuleCollider2D>();
         enemy = FindObjectOfType<Enemy>();
         defaultGravity = myRigidbody.gravityScale;
-        lifeCount = 3;
+        
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!isAlive) { return; }
         Run();
         FlipSprite();
-        resetJumpCount();
+        ResetJumpCount();
         Climbing();
         Die();
-        steppingEnemy();
+        SteppingEnemy();
     }
 
     void OnMove(InputValue value)
@@ -127,19 +130,14 @@ public class Player : MonoBehaviour
     {
         if (!isAlive) { return; }
         if (isMoving) { return; }
-        if (value.isPressed)
+        if (value.isPressed && arrowCount > 0)
         {
             myAnimator.SetTrigger("triggerShooting");
             Instantiate(arrow, arrowSpawn.position, transform.rotation);
-            //myAnimator.SetBool("isShooting", true);
-            //myAnimator.SetBool("isShooting", false);
         }
-        
-        //myAnimator.ResetTrigger("triggerShooting");
-        
     }
 
-    void resetJumpCount()
+    void ResetJumpCount()
     {
         if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && jumpCount != extraJumpCount)
         {
@@ -152,34 +150,44 @@ public class Player : MonoBehaviour
 
     void Die()
     {
-        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        if (isInvincible) { return; }
+        if (myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazard")))
         {
-            if (lifeCount > 0)
-            {
-                Debug.Log(lifeCount);
-                lifeCount--;
-                myRigidbody.velocity = deathKick;
-                myAnimator.SetTrigger("triggerDie");
-            }
-            else
-            {
-                myRigidbody.velocity = deathKick;
-                myAnimator.SetTrigger("triggerDie");
-                isAlive = false;
-            }
-            
+            StartCoroutine(SetInvincibleState());
+            FindObjectOfType<GameSession>().ProcessPlayerDeath();
         }
     }
 
-    void steppingEnemy()
+    void SteppingEnemy()
     {
-        if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Enemy"))&& !isInvincible)
         {
             
             myRigidbody.velocity = stepBoost;
             Destroy(enemy.gameObject);
             //myAnimator.SetTrigger("triggerDie");
             //isAlive = false;
+        }
+    }
+
+    public void SendFlying()
+    {
+        myRigidbody.velocity = deathKick;
+        myAnimator.SetTrigger("triggerDie");
+    }
+
+    public void SetAlive()
+    {
+        isAlive = false;
+    }
+   
+    IEnumerator SetInvincibleState()
+    {
+        if (!isInvincible)
+        {
+            isInvincible = true;
+            yield return new WaitForSeconds(invincibleTime);
+            isInvincible = false; 
         }
     }
 }
