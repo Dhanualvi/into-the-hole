@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 
     int jumpCount;
     float defaultGravity;
-    bool isAlive = true;
+    [SerializeField] bool isAlive = true;
     bool isMoving;
     bool isInvincible = false;
     
@@ -141,7 +141,7 @@ public class Player : MonoBehaviour
     {
         if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && jumpCount != extraJumpCount)
         {
-            Debug.Log(jumpCount);
+            //Debug.Log(jumpCount);
             jumpCount = extraJumpCount;
         }
     }
@@ -155,6 +155,7 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(SetInvincibleState());
             FindObjectOfType<GameSession>().ProcessPlayerDeath();
+            SendFlying();
         }
     }
 
@@ -178,7 +179,12 @@ public class Player : MonoBehaviour
 
     public void SetAlive()
     {
-        isAlive = false;
+        if (isAlive)
+        {
+            isAlive = false;
+            
+        }
+        
     }
    
     IEnumerator SetInvincibleState()

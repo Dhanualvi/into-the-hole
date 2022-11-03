@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        
+        if(collision.tag == "Player") { return; }
         moveSpeed = -moveSpeed;
         FlipSprite();
     }

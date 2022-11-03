@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 2436596504054046834}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1817681499
-  m_SortingLayer: 9
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: -1522774747, guid: 9c09ed4d84387d04ab6221dc03858a36, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fffdcc9cf1dea34088503c866ece908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 9
+  moveSpeed: 7
   jumpSpeed: 20
   climbSpeed: 10
   extraJumpCount: 1
@@ -231,6 +231,7 @@ MonoBehaviour:
   stepBoost: {x: 0, y: 15}
   arrowSpawn: {fileID: 6883579925743300472}
   arrow: {fileID: 1487531896675657680, guid: d2bb0ba544901b6408ae6f89416d0931, type: 3}
+  isAlive: 1
 --- !u!61 &2436596504054046834
 BoxCollider2D:
   m_ObjectHideFlags: 0
